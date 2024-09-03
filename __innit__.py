@@ -1,12 +1,13 @@
 import tkinter as tk  #GUI
+from tkinter import messagebox
+
 import weather as w  #weather.py
 import requests  #requests for user location
 import datetime as dt
 
 
 class Application:
-    def __init__(self, window, windspeed, Bcolor, Hcolor, filepath, Condition, location, temperature,
-                 dailyWeather):  #Initialize the Screen
+    def __init__(self, window, windspeed, Bcolor, Hcolor, filepath, Condition, location, temperature, dailyWeather):  #Initialize the Screen
 
         self.window = window
         self.canvas = tk.Canvas(  #Create Window
@@ -116,6 +117,15 @@ class Application:
             height=48.0
         )
 
+        self.button = tk.Button( #Button for info
+            text="Info",
+            command=self.display_info,
+            relief="flat",
+            font=("Inter SemiBold", 12)
+        )
+        self.button.place(x=50, y=50, width=50, height=50)
+
+
         self.txt = tk.Label( #Error handling label for wrong inputs/regular errors.
             text="",
             font=("Inter SemiBold", 12),
@@ -186,6 +196,15 @@ class Application:
             self.txt.config(
                 text="An Error has occured. Please try again, or make sure the spelling is correct about the inputted town")
         return 1
+
+    def display_info(self):
+        file_path = "info.txt"
+        try:
+            with open(file_path, "r", encoding="utf-8") as file:
+                content = file.read()
+                messagebox.showinfo("Info", content)
+        except FileNotFoundError:
+            messagebox.showerror("Error", f"File '{file_path}' not found.")
 
 
 def init_variables(location): #Initialize the variables for __innit__()
